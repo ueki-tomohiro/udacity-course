@@ -104,14 +104,32 @@ class _CategoryRouteState extends State<CategoryRoute> {
   ///
   /// For portrait, we use a [ListView]. For landscape, we use a [GridView].
   Widget _buildCategoryWidgets() {
-    return ListView.builder(
-      itemBuilder: (BuildContext context, int index) {
-        return CategoryTile(
-          category: _categories[index],
-          onTap: _onCategoryTap,
-        );
+
+    return OrientationBuilder(
+      builder: (BuildContext context, Orientation orientation) {
+        if (orientation == Orientation.portrait) {
+          return ListView.builder(
+            itemBuilder: (BuildContext context, int index) {
+              return CategoryTile(
+                category: _categories[index],
+                onTap: _onCategoryTap,
+              );
+            },
+            itemCount: _categories.length,
+          );
+        } else {
+          return GridView.count(
+            crossAxisCount: 2,
+            childAspectRatio: 3.0,
+            children: _categories.map((Category c) {
+              return CategoryTile(
+                category: c,
+                onTap: _onCategoryTap,
+              );
+            }).toList(),
+          );
+        }
       },
-      itemCount: _categories.length,
     );
   }
 
